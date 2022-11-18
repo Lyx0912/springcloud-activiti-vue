@@ -5,6 +5,7 @@ const getters = {
   avatar: state => state.user.avatar,
   name: state => state.user.name,
   permissions: state => state.user.permissions,
+  nickname: state => state.user.nickname,
   visitedViews: state => this.state.tagsView.visitedViews
 }
 export default getters

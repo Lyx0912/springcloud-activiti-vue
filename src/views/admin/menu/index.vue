@@ -413,6 +413,7 @@ export default {
     },
     fetchPermissionList(menuId) {
       permissionList(menuId).then(res => {
+        console.log(res.data)
         this.permissionList = res.data
       })
     },

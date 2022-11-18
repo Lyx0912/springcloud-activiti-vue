@@ -9,7 +9,8 @@ const getDefaultState = () => {
     name: '',
     avatar: '',
     routes: [],
-    permissions: []
+    permissions: [],
+    nickname: ''
   }
 }
 
@@ -33,6 +34,9 @@ const mutations = {
   },
   SET_PERMISSIONS: (state, permissions) => {
     state.permissions = permissions
+  },
+  SET_NICKNAME: (state, nickname) => {
+    state.nickname = nickname
   }
 }
 
@@ -65,10 +69,11 @@ const actions = {
           return reject('Verification failed, please Login again.')
         }
 
-        const { username, avatar } = data
+        const { username, avatar,nickname } = data
 
         commit('SET_NAME', username)
         commit('SET_AVATAR', avatar)
+        commit('SET_NICKNAME', nickname)
         resolve(data)
       }).catch(error => {
         reject(error)
@@ -79,14 +84,10 @@ const actions = {
   // user logout
   logout({ commit, state }) {
     return new Promise((resolve, reject) => {
-      logout(state.token).then(() => {
-        removeToken() // must remove  token  first
-        resetRouter()
-        commit('RESET_STATE')
-        resolve()
-      }).catch(error => {
-        reject(error)
-      })
+      removeToken() // must remove  token  first
+      resetRouter()
+      commit('SET_TOKEN','')
+      resolve()
     })
   },
 

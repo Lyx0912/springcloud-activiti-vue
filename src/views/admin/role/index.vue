@@ -42,13 +42,12 @@
             @row-click="handleRoleRowClick">
             <el-table-column
               label="角色名称"
-              prop="name"
-              width="120">
+              prop="name">
             </el-table-column>
             <el-table-column
               label="角色编码"
               prop="code"
-              width="120">
+              width="150">
             </el-table-column>
             <el-table-column
               label="显示顺序"
@@ -57,7 +56,7 @@
             </el-table-column>
             <el-table-column
               label="状态"
-              prop="visible">
+              prop="visible" width="90">
               <template slot-scope="scope">
                 <el-switch
                   v-model="scope.row.status"
@@ -69,7 +68,7 @@
                 </el-switch>
               </template>
             </el-table-column>
-            <el-table-column align="center" label="操作" width="120">
+            <el-table-column align="center" label="操作" >
               <template slot-scope="scope">
                 <div class="tag-group">
                   <el-tag size="small" style="cursor: pointer" type="" @click="handleEdit(scope.row)">编辑</el-tag>&nbsp;&nbsp;
@@ -178,7 +177,11 @@ export default {
         })
         return
       }
-      saveRoleMenus(this.roleId, {ids: this.$refs.tree.getCheckedKeys()}).then(res => {
+      var arr = [];
+      this.$refs.tree.getCheckedNodes(false, true).forEach(item=>{
+        arr.push(item.id)
+      })
+      saveRoleMenus(this.roleId, { ids: arr }).then(res => {
         this.$message({
           type: 'success',
           message: '更新成功!'
@@ -197,7 +200,15 @@ export default {
         this.rolePermissions = res.data
       })
       roleMenus(role.id).then(res => {
-        this.$refs.tree.setCheckedKeys(res.data)
+        this.$nextTick(() => {
+          res.data.forEach((element) => {
+            var node = this.$refs.tree.getNode(element)
+            if (node.isLeaf) {
+              this.$refs.tree.setChecked(node, true)
+            }
+          })
+        })
+        // this.$refs.tree.setCheckedKeys(res.data)
       })
     },
     loadMenuSelect() {

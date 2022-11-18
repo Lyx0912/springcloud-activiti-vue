@@ -7,6 +7,7 @@ import { getToken } from '@/utils/auth' // get token from cookie
 import getPageTitle from '@/utils/get-page-title'
 import Layout from '@/layout'
 import {indexOf} from "core-js/internals/array-includes";
+import {Logger} from "runjs/lib/common";
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
@@ -81,7 +82,11 @@ function handleMenus(routes, currentUserMenus) {
     if (currentUserMenus.indexOf(route.id) === -1 && route.children.length === 0) {
       route.hidden = true
     } else {
-      route.hidden = false
+      if(currentUserMenus.indexOf(route.id) === -1) {
+        route.hidden = true
+      } else {
+        route.hidden = false
+      }
     }
     route.meta = {
       title: route.name,
@@ -110,6 +115,5 @@ function handleMenus(routes, currentUserMenus) {
       }
     }
   })
-  console.log(routes)
   return routes
 }
