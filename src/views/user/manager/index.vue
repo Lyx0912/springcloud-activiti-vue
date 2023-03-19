@@ -28,7 +28,7 @@
         width="55">
       </el-table-column>
       <el-table-column align="center" label="用户名" prop="username" />
-      <el-table-column label="用户昵称" align="center" prop="nickname" />
+      <el-table-column label="用户昵称" align="center" prop="nickname" v-permission="'admin:user:add'"/>
       <el-table-column label="手机号" align="center" prop="mobile" width="150"/>
       <el-table-column label="邮箱"  align="center" prop="email" />
       <el-table-column class-name="status-col" label="性别" width="110" align="center">

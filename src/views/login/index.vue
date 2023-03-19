@@ -1,6 +1,5 @@
 <template>
   <div class="login-container">
-    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
       <div class="login-root">
         <div class="box-root flex-flex flex-direction--column" style="min-height: 100vh;flex-grow: 1;">
           <div class="loginbackground box-background--white padding-top--64">
@@ -37,35 +36,48 @@
           </div>
           <div class="box-root padding-top--24 flex-flex flex-direction--column" style="flex-grow: 1; z-index: 9;">
             <div class="box-root padding-top--48 padding-bottom--24 flex-flex flex-justifyContent--center">
-              <h1>林涉外职工考勤管理信息系统</h1>
+              <h1>职工考勤管理信息系统</h1>
             </div>
             <div class="formbg-outer">
               <div class="formbg">
                 <div class="formbg-inner padding-horizontal--48">
                   <span class="padding-bottom--15">登陆</span>
-                  <form id="stripe-login">
+                  <el-form id="stripe-login" ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
                     <div class="field padding-bottom--24">
-                      <label for="username">用户名</label>
-                      <input type="text" name="username" ref="username" v-model="loginForm.username">
+                        <label for="username">用户名</label>
+                      <el-form-item prop="username">
+                        <el-input type="text" name="username" ref="username" v-model="loginForm.username" />
+                      </el-form-item>
                     </div>
                     <div class="field padding-bottom--24">
-                      <div class="grid--50-50">
-                        <label for="password">密码</label>
-                        <div class="reset-pass">
-                          <a href="#">忘记密码?</a>
+                        <div class="grid--50-50">
+                          <label for="password">密码</label>
+                          <div class="reset-pass">
+                            <a href="#">忘记密码?</a>
+                          </div>
                         </div>
-                      </div>
-                      <input type="password" name="password" auto-complete="on" ref="password" v-model="loginForm.password" @keyup.enter.native="handleLogin()">
+                      <el-form-item prop="password">
+                        <el-input type="password" name="password"  ref="password" v-model="loginForm.password" @keyup.enter.native="handleLogin()" />
+                      </el-form-item>
+                    </div>
+                    <div class="field padding-bottom--24">
+                        <div class="grid--50-50">
+                          <label for="password">验证码</label>
+                        </div>
+                      <el-form-item prop="captcha">
+                        <el-input style="width:170px;margin-right: 20px;vertical-align:middle;" type="text" v-model="loginForm.captcha" name="captcha" ref="captcha" />
+                        <el-image :src="captchaC" style="vertical-align:middle;" v-on:click="getCaptcha()"></el-image>
+                      </el-form-item>
                     </div>
                     <div class="field field-checkbox padding-bottom--24 flex-flex align-center">
                       <label for="checkbox">
-                        <input type="checkbox" name="checkbox"> 记住我
+                        <br>
                       </label>
                     </div>
                     <div class="field padding-bottom--24" >
                       <el-button :loading="loading" style="background-color:#5469d4;width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin"><span style="color: white">登录</span></el-button>
                     </div>
-                  </form>
+                  </el-form>
                 </div>
               </div>
               <div class="footer-link padding-top--24">
@@ -78,7 +90,6 @@
           </div>
         </div>
       </div>
-    </el-form>
   </div>
 </template>
 
@@ -90,27 +101,31 @@ export default {
   data() {
     const validateUsername = (rule, value, callback) => {
       if (!validUsername(value)) {
-        callback(new Error('Please enter the correct user name'))
+        callback(new Error('请输入正确的用户名'))
       } else {
         callback()
       }
     }
     const validatePassword = (rule, value, callback) => {
       if (value.length < 6) {
-        callback(new Error('The password can not be less than 6 digits'))
+        callback(new Error('密码不能少于六位'))
       } else {
         callback()
       }
     }
     return {
+      captchaC: '',
+      baseUrl: process.env.VUE_APP_BASE_API,
       loginForm: {
         username: '',
         password: '',
-        grant_type: 'password'
+        grant_type: 'password',
+        captcha: ''
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+        password: [{ required: true, trigger: 'blur', validator: validatePassword }],
+        captcha: [{ required: true, trigger: 'blur', message: '验证码不能为空' }]
       },
       loading: false,
       passwordType: 'password',
@@ -125,7 +140,13 @@ export default {
       immediate: true
     }
   },
+  created() {
+    this.getCaptcha()
+  },
   methods: {
+    getCaptcha() {
+      this.captchaC = this.baseUrl + '/cloud-auth/oauth/captcha?time=' + new Date()
+    },
     showPwd() {
       if (this.passwordType === 'password') {
         this.passwordType = ''
@@ -139,7 +160,6 @@ export default {
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
-          this.loading = true
           this.$store.dispatch('user/login', this.loginForm).then(() => {
             this.$router.go({ path: this.redirect || '/' })
             this.loading = false
@@ -248,7 +268,7 @@ a {
   padding-top: 48px;
 }
 .padding-bottom--24 {
-  padding-bottom: 24px;
+  padding-bottom: 0px;
 }
 .padding-horizontal--48 {
   padding: 48px;

@@ -46,9 +46,9 @@ const actions = {
   },
   // user login
   login({ commit }, userInfo) {
-    const { username, password, grant_type } = userInfo
+    const { username, password, grant_type,captcha } = userInfo
     return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: password, grant_type: grant_type }).then(response => {
+      login({ username: username.trim(), password: password, grant_type: grant_type,captcha: captcha }).then(response => {
         const { data } = response
         commit('SET_TOKEN', data.access_token)
         setToken(data.access_token)

@@ -16,6 +16,7 @@ import '@/icons' // icon
 import '@/permission'
 import common from "@/utils/common";
 import permission from "@/directive/permission"; // permission control
+import echarts from 'echarts'
 
 /**
  * If you don't want to use mock-server
@@ -36,6 +37,7 @@ if (process.env.NODE_ENV === 'production') {
 Vue.use(ElementUI)
 Vue.use(permission)
 
+Vue.prototype.$echarts = echarts
 Vue.prototype.$common = common
 Vue.config.productionTip = false
 
