@@ -210,12 +210,12 @@ export default {
           }
         },
         legend: {
-          data: ['物品数量', '用户数量']
+          data: ['用户数量', '物品数量']
         },
         xAxis: [
           {
             type: 'category',
-            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            data: ['2022-1', '2022-2', '2022-3', '2022-4', '2022-5', '2022-6', '2022-7', '2022-8', '2022-9', '2022-10', '2022-11', '2022-2'],
             axisPointer: {
               type: 'shadow'
             }
@@ -228,11 +228,11 @@ export default {
         ],
         series: [
           {
-            name: '物品数量',
-            type: 'line',
+            name: '用户数量',
+            type: 'bar',
             tooltip: {
               valueFormatter: function (value) {
-                return value + ' ml'
+                return value
               }
             },
             itemStyle: {
@@ -241,12 +241,12 @@ export default {
               }
             },
             data: [
-              2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3
+              2, 4, 7, 23, 25, 76, 135, 162, 220, 295, 400, 600
             ]
           },
           {
-            name: '用户数量',
-            type: 'bar',
+            name: '物品数量',
+            type: 'line',
             itemStyle: {
               normal: {
                 color: '#2EC7C9'
@@ -254,25 +254,25 @@ export default {
             },
             tooltip: {
               valueFormatter: function(value) {
-                return value + ' °C'
+                return value
               }
             },
-            data: [2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2]
+            data: [2, 50, 151, 250, 452, 555, 677, 801, 1002, 1521, 1700, 1900]
           }
         ]
       }
       var optionPie = {
+        color: ['#fc8251', '#5470c6', '#91cd77', '#ef6567', '#f9c956', '#75bedc'],
         title: {
-          text: 'Referer of a Website',
-          subtext: 'Fake Data',
+          text: '分类统计',
           left: 'center'
         },
         tooltip: {
           trigger: 'item'
         },
         legend: {
-          orient: 'vertical',
-          left: 'left'
+          left: 'center',
+          bottom: '10',
         },
         series: [
           {
@@ -280,11 +280,11 @@ export default {
             type: 'pie',
             radius: '50%',
             data: [
-              { value: 1048, name: 'Search Engine' },
-              { value: 735, name: 'Direct' },
-              { value: 580, name: 'Email' },
-              { value: 484, name: 'Union Ads' },
-              { value: 300, name: 'Video Ads' }
+              { value: 1048, name: '数码家电' },
+              { value: 735, name: '日用百货' },
+              { value: 580, name: '家具' },
+              { value: 484, name: '办公文教' },
+              { value: 300, name: '其他' }
             ],
             emphasis: {
               itemStyle: {
